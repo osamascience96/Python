@@ -8,4 +8,4 @@ def download_web_image(url):
     urllib.request.urlretrieve(url, fullName) # requires the url and the name of which you want to save the image 
 
 # Pass the url of the image to be downloaded 
-download_web_image('https://images.mid-day.com/images/2018/jan/Ranveer-Singh-b.jpg')
+download_web_image('https://sc01.alicdn.com/kf/UTB8yC05B5aMiuJk43PTq6ySmXXa2/Open-Hot-Sexi-Images-Hot-Sexy-Girl.jpg')
