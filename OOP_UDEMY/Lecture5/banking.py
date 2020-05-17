@@ -33,7 +33,7 @@ class SavingAccount(Account):
     def authenticate(self, name, accountNumber):
         if accountNumber in self.SavingAccount.keys():
             if self.SavingAccount[accountNumber][0] == name:
-                print("Authentication Failed")
+                print("Authentication Successful")
                 self.accountNumber = accountNumber
                 return True
             else:
@@ -61,4 +61,43 @@ class SavingAccount(Account):
         print("Avilable Balance: {}".format(self.SavingAccount[self.accountNumber][1]))
 
 
-# work on the menu...
+savingsAccount = SavingAccount()
+while True:
+    print("Enter 1 to create a New Account")
+    print("Enter 2 to access the existing account")
+    print("Enter 3 to exit")
+    userChoice = int(input())
+    if userChoice is 1:
+        print("Enter your Name: ")
+        name = input()
+        print("Enter the initial deposit: ")
+        inititalDeposit = float(input())
+        savingsAccount.createAccount(name, inititalDeposit)
+    elif userChoice is 2:
+        print("Enter Your Name: ")
+        name = input()
+        print("Enter Your Account Number: ")
+        accountNumber = int(input())
+        authenticationStatus = savingsAccount.authenticate(name, accountNumber)
+        if authenticationStatus is True:
+            while True:
+                print("Enter 1 to Withdraw")
+                print("Enter 2 to deposit")
+                print("Enter 3 to display the available balance")
+                print("Enter 4 to go back to the previous menu")
+                userChoice = int(input())
+                if userChoice is 1:
+                    print("Enter the Withdrawl amount")
+                    withdrawlAmount = float(input())
+                    savingsAccount.withdraw(withdrawlAmount)
+                elif userChoice is 2:
+                    print("Enter the Deposit amount")
+                    depositAmount = float(input())
+                    savingsAccount.deposit(depositAmount)
+                elif userChoice is 3:
+                    savingsAccount.displayBalance()
+                elif userChoice is 4:
+                    break
+    elif userChoice is 3:
+        break
+
