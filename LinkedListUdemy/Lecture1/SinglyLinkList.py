@@ -103,40 +103,40 @@ class LinkedList:
             print(currentNode.data)
             currentNode = currentNode.next
 
+if (__name__ == "__main__"):
+    linklist = LinkedList()
 
-linklist = LinkedList()
+    # creating some nodes 
+    firstNode = Node("Osama")
+    secondNode = Node("you")
+    thirdNode = Node("will")
+    fourthNode = Node("be")
+    fifthNode = Node("Single")
+    sixthNode = Node("Forever")
 
-# creating some nodes 
-firstNode = Node("Osama")
-secondNode = Node("you")
-thirdNode = Node("will")
-fourthNode = Node("be")
-fifthNode = Node("Single")
-sixthNode = Node("Forever")
+    # passing all the nodes one by one to the function
+    linklist.InsertNode(firstNode)
+    linklist.InsertNode(secondNode)
+    linklist.InsertNode(thirdNode)
+    linklist.InsertNode(fourthNode)
+    linklist.InsertNode(fifthNode)
+    linklist.InsertNode(sixthNode)
 
-# passing all the nodes one by one to the function
-linklist.InsertNode(firstNode)
-linklist.InsertNode(secondNode)
-linklist.InsertNode(thirdNode)
-linklist.InsertNode(fourthNode)
-linklist.InsertNode(fifthNode)
-linklist.InsertNode(sixthNode)
+    # insert the new node to the beginning
+    headNode = Node("Hey!")
+    linklist.InsertHead(headNode)
 
-# insert the new node to the beginning
-headNode = Node("Hey!")
-linklist.InsertHead(headNode)
+    # Insert the data at position
+    dataNode = Node("Ahmed")
+    linklist.InsertAt(dataNode, 2) 
 
-# Insert the data at position
-dataNode = Node("Ahmed")
-linklist.InsertAt(dataNode, 2) 
+    # delete the last node
+    linklist.deleteEnd()
+    # delte the head node
+    linklist.deleteHead()
 
-# delete the last node
-linklist.deleteEnd()
-# delte the head node
-linklist.deleteHead()
+    # delete the node at position x
+    linklist.DeleteAt(2)
 
-# delete the node at position x
-linklist.DeleteAt(2)
-
-# print the list 
-linklist.printList()
+    # print the list 
+    linklist.printList()
