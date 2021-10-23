@@ -1,6 +1,7 @@
-from tkinter import Label, Tk
+from tkinter import Button, Label, Tk
 from calculate_time import get_calculated_time_detail
-from threading import Event
+from interval import setInterval
+
 
 # set the labels values repeatedly
 def setLabelDateTime(label1, label2, label3, label4, label5, label6, label7, start_time, end_time):
@@ -13,6 +14,8 @@ def setLabelDateTime(label1, label2, label3, label4, label5, label6, label7, sta
     label5.config(text=f"Total Seconds Left: {calculated_datetime['total_seconds_left']} seconds, Total Milliseconds Left: {calculated_datetime['total_millis_left']} millis")
     label6.config(text=f"Weeks Left: {calculated_datetime['total_weeks_left']}")
     label7.config(text=f"Total Jummah Left: {calculated_datetime['total_jummah_remaining']}")
+
+
 
 def timeinterface(start_time, end_time):
     root = Tk()
@@ -44,5 +47,8 @@ def timeinterface(start_time, end_time):
 
     label_7 = Label(root, text=f"Total Jummah Left: {calculated_datetime['total_jummah_remaining']}", font="sans")
     label_7.pack(padx=10, pady=10)
+
+    btn_func = Button(root, text="Set Interval", font="sans")
+    btn_func.pack(padx=10, pady=10)
 
     root.mainloop()
