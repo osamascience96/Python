@@ -1,7 +1,6 @@
-from ctypes import sizeof
-from numpy import deprecate
 import requests
 from bs4 import BeautifulSoup
+from Excel import Excel
 
 url = "https://www.oic-oci.org/home/?lan=en"
 
@@ -52,7 +51,7 @@ htmlContent = r.content
 soup = BeautifulSoup(htmlContent, 'html.parser')
 
 # title of the website
-print(soup.title.get_text())
+title = soup.title.get_text()
 
 
 # get the hot news of the website
@@ -86,3 +85,20 @@ for li_elem in departments_contents:
 address = soup.find('address').get_text().replace('Organisation of Islamic Cooperation', '')
 
 
+
+excelObj = Excel()
+excelObj.setTitle(title)
+
+# set the hotnews
+excelObj.setNewsTitle("Hot News")
+excelObj.setHotNewsList(list_of_anchortag)
+
+# set the department list
+excelObj.setDepartmentTitle(departments_heading)
+excelObj.setDepartmentList(depart_list)
+
+# set the Address
+excelObj.setAddresstoExcel(address)
+
+# close the excelobj
+excelObj.closeWorkBook()
