@@ -4,8 +4,9 @@ from fetch_sku import SKU
 
 class AllProducts:
     
-    def __init__(self, link):
+    def __init__(self, categoryTitle, link):
         print('Fetching Products data from ' + link + " ......")
+        self.categoryTitle = categoryTitle
         self.link = link
         self.pagelinklist = set()
 
@@ -30,7 +31,7 @@ class AllProducts:
         listlinks = self.soup.find('ul', class_='products').find_all('li')
         for link in listlinks:
             fetched_link = link.find('a').get('href')
-            sku = SKU(fetched_link)
+            sku = SKU(self.categoryTitle, fetched_link)
             self.products_list.append(sku.GetProduct())
     
     def GetRemainingProducts(self):
@@ -42,7 +43,7 @@ class AllProducts:
             listlinks = self.soup.find('ul', class_='products').find_all('li')
             for link in listlinks:
                 fetched_link = link.find('a').get('href')
-                sku = SKU(fetched_link)
+                sku = SKU(self.categoryTitle, fetched_link)
                 self.products_list.append(sku.GetProduct())
                     
         

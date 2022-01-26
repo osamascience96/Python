@@ -13,9 +13,14 @@ class Excel:
         self.workbook = xlsxwriter.Workbook('sku_products.xlsx')
         self.worksheet = self.workbook.add_worksheet()
         # write headings
-        self.worksheet.write(0, 0, 'Title', self.workbook.add_format({'bold': True}))
-        self.worksheet.write(0, 1, 'URL', self.workbook.add_format({'bold': True}))
-        self.worksheet.write(0, 2, 'SKU', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 0, 'Name', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 1, 'Item No', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 2, 'Category', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 3, 'Price', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 4, 'Description', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 5, 'Link', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 6, 'Image', self.workbook.add_format({'bold': True}))
+        self.worksheet.write(0, 7, 'Specification', self.workbook.add_format({'bold': True}))
 
     def GetPreSKUList(self):
         for sku in self.exceldata.get('Unnamed: 0'):
@@ -31,13 +36,22 @@ class Excel:
         row = 1
         for product in sku_list:
             title = product.getTitle()
-            link  = product.getLink()
             sku = str(product.getSKU())
+            category = product.getCategory()
+            price = product.getPrice()
+            description = product.getDescription()
+            link  = product.getLink()
+            image = product.getImageLink()
+            specs = product.getSpecifications()
             if(sku in preskulist):
                 self.worksheet.write(row, 0, title)
-                self.worksheet.write(row, 1, link)
-                self.worksheet.write(row, 2, sku)
-
+                self.worksheet.write(row, 1, sku)
+                self.worksheet.write(row, 2, category)
+                self.worksheet.write(row, 3, price)
+                self.worksheet.write(row, 4, description)
+                self.worksheet.write(row, 5, link)
+                self.worksheet.write(row, 6, image)
+                self.worksheet.write(row, 7, specs)
                 row +=1;
         
 

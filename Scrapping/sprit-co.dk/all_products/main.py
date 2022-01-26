@@ -25,11 +25,10 @@ for category in all_categories:
     link = category.find('a').get('href');
     print("Get Products from " + title + " ....")
     
-    allprods = AllProducts(link)
+    allprods = AllProducts(title, link)
     allprods.GetRemainingProducts()
 
     all_cat_products[title] = allprods.GetWebsiteProductsList()
-
 
 
 for key in all_cat_products:
