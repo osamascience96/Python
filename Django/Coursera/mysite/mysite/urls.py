@@ -13,10 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls import url
+from django.views.static import serve
+
+# define path for the sample site code
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SITE_ROOT = os.path.join(BASE_DIR, 'site')
 
 urlpatterns = [
     path('polls/', include('polls.urls')),
     path('admin/', admin.site.urls),
+    url(r'^site/(?P<path>.*)$', serve,
+        {'document_root': SITE_ROOT, 'show_indexes': True},
+        name='site/'
+    ),
 ]
