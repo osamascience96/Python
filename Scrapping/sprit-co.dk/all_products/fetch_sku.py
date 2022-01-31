@@ -30,8 +30,12 @@ class SKU:
         
         sku = self.soup.find('tr', class_='woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_sku')
         
-        price = self.soup.find('span', class_='woocommerce-Price-amount amount').find('bdi').get_text()
-        price = price.replace('\xa0', " ")
+        price = self.soup.find('span', class_='woocommerce-Price-amount amount')
+        if price is not None:
+            price = price.find('bdi').get_text()
+            price = price.replace('\xa0', " ")
+        else:
+            price = 'Not Available'
         
         description = self.soup.find('div', class_='woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab')
         if description is not None:

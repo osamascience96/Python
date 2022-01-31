@@ -33,7 +33,8 @@ for category in all_categories:
 
 for key in all_cat_products:
     allprods = all_cat_products.get(key)
-    excelObj.WritetoExcelFile(allprods, sku_list)
+    # excelObj.WritetoExcelFile(allprods, sku_list)
+    excelObj.WriteAlltoExcelFile(allprods)
 
 # close the book
 excelObj.closeWorkBook()
