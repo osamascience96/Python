@@ -13,14 +13,14 @@ But python build more abstraction for us to have so that we don't have to bother
 ![ORM Mapper Image](ORM_Django_basic_image.png)
 
 
-*** What are Migrations in Django? ***
+***What are Migrations in Django?***
 > Migrations is a method in Django that is used to **"apply the changes based on the changes that you have made in your models"**. For instance if you change add a field, or delete a specific model or other operations related to CRUD.
 > So we can easily focus on this by focusing on the simple flow of migration procedures that is mostly done.
 
-** Example **
+**Example**
 If i make any changes in the model, that would surely reflect on to our database but in order to do that, after making changes we have to create new migrations on the queue that fill applied when we migrate the following changes
 
-** General Steps **
+**General Steps**
 1. Make changes in the model
 2. makemigrations
 3. migrate
