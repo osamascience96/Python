@@ -1,0 +1,10 @@
+gspread==5.1.1
+gspread_dataframe==3.2.2
+oauth2client==4.1.3
+pandas==1.3.4
+pydub==0.25.1
+requests==2.26.0
+selenium_stealth==1.0.6
+SpeechRecognition==3.8.1
+webdriver_manager==3.5.2
+ffmpeg-python

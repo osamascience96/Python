@@ -1,0 +1,8 @@
+beautifulsoup4==4.10.0
+gspread==5.1.1
+gspread_dataframe==3.2.2
+oauth2client==4.1.3
+pandas==1.3.4
+selenium==4.1.0
+selenium_stealth==1.0.6
+webdriver_manager==3.5.2
