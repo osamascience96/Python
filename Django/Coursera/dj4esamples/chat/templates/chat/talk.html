@@ -1,0 +1,38 @@
+{% extends 'base_bootstrap.html' %}
+{% block content %}
+<h1>Chat</h1>
+<form method="post">
+{% csrf_token %}
+<input type="text" name="message" size="60"/>
+<input type="submit" value="Chat"/> 
+<input type="submit" name="reset" value="Reset"/> 
+<a href="{% url 'chat:main' %}" target="_blank">Cancel</a>
+</p>
+</form>
+
+<div id="chatcontent">
+<img src="{% url 'chat:static' 'spinner.gif' %}" alt="Loading..."/>
+</div>
+
+<script type="text/javascript">
+function updateMsg() {
+    console.log('Requesting JSON'); 
+    $.getJSON('{% url 'chat:messages' %}', function(rowz){
+        console.log('JSON', rowz);
+        $('#chatcontent').empty();
+        for (var i = 0; i < rowz.length; i++) {
+          arow = rowz[i];
+          $('#chatcontent').append('<p>'+arow[0] +
+              '<br/>&nbsp;&nbsp;'+arow[1]+"</p>\n");
+        }
+        setTimeout('updateMsg()', 4000);
+    });
+}
+
+// Make sure JSON requests are not cached
+$(document).ready(function() {
+    $.ajaxSetup({ cache: false });
+    setTimeout('updateMsg()', 2000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base_bootstrap.html" %}
+{% block content %}
+<h1>Favorite Things</h1>
+<p>
+{% if thing_list %}
+<ul>
+  {% for thing in thing_list %}
+    <li>
+        <a href="{% url 'favs:thing_detail'  thing.id %}">{{ thing.title }}</a>
+        {% if thing.owner_id == user.id %}
+        (<a href="{% url 'favs:thing_update' thing.id %}">Edit</a> |
+        <a href="{% url 'favs:thing_delete' thing.id %}">Delete</a>)
+        {% endif %}
+        {% if user.is_authenticated %}
+        <!-- Two hrefs with two stacked icons each - one showing and one hidden -->
+        <a href="#" onclick=
+            "favPost('{% url 'favs:thing_unfavorite' thing.id %}', {{ thing.id }} );return false;"
+            {% if thing.id not in favorites %} style="display: none;" {% endif %}
+            id="favorite_star_{{thing.id}}">
+        <span class="fa-stack" style="vertical-align: middle;">
+        <i class="fa fa-star fa-stack-1x" style="color: orange;"></i>
+        <i class="fa fa-star-o fa-stack-1x"></i>
+        </span>
+        </a>
+        <!-- the second href -->
+        <a href="#" onclick=
+             "favPost('{% url 'favs:thing_favorite' thing.id %}', {{ thing.id }} );return false;"
+            {% if thing.id in favorites %} style="display: none;" {% endif %}
+            id="unfavorite_star_{{thing.id}}">
+        <span class="fa-stack" style="vertical-align: middle;">
+        <i class="fa fa-star fa-stack-1x" style="display: none; color: orange;"></i>
+        <i class="fa fa-star-o fa-stack-1x"></i>
+        </span>
+        </a>
+        {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+  <p>There are no things in the database.</p>
+{% endif %}
+</p>
+<p>
+<a href="{% url 'favs:thing_create' %}">Add a Thing</a> |
+{% if user.is_authenticated %}
+<a href="{% url 'logout' %}?next={% url 'favs:all' %}">Logout</a>
+{% else %}
+<a href="{% url 'login' %}?next={% url 'favs:all' %}">Login</a>
+{% endif %}
+</p>
+<script>
+function favPost(url, thing_id) {
+    console.log('Requesting JSON');
+    $.post(url, {},  function(rowz){
+        console.log(url, 'finished');
+        $("#unfavorite_star_"+thing_id).toggle();
+        $("#favorite_star_"+thing_id).toggle();
+    }).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+    });
+}
+</script>
+{% endblock %}

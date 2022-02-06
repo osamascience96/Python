@@ -1,0 +1,14 @@
+<h1>List of {{ crazy_thing }}s</h1>
+<p>
+{% if horse_list %}
+<ul>
+  {% for xyz in horse_list %}
+    <li>
+      <a href="{% url 'gview:horse' xyz.id %}">{{ xyz.name }}</a>
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+  <p>There are no {{ crazy_thing }}s in the database.</p>
+{% endif %}
+</p>

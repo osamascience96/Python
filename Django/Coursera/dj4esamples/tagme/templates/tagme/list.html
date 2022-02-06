@@ -1,0 +1,44 @@
+{% extends "base_bootstrap.html" %}
+{% block content %}
+<h1>Taggable Forums</h1>
+<div style="float:right">
+<!-- https://www.w3schools.com/howto/howto_css_search_button.asp -->
+<form>
+  <input type="text" placeholder="Search.." name="search"
+  {% if search %} value="{{ search }}" {% endif %}
+  >
+  <button type="submit"><i class="fa fa-search"></i></button>
+<a href="{% url 'tagme:all' %}"><i class="fa fa-undo"></i></a>
+</form>
+</div>
+<p>
+{% if forum_list %}
+<ul>
+  {% for forum in forum_list %}
+    <li>
+        <a href="{% url 'tagme:tagme_detail'  forum.id %}">{{ forum.title }}</a>
+        {% if forum.owner == user %}
+        (<a href="{% url 'tagme:tagme_update' forum.id %}">Edit</a> |
+        <a href="{% url 'tagme:tagme_delete' forum.id %}">Delete</a>)
+        </p>
+        {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+  {% if search %}
+  <p>There are no forums that match your search criteria.</p>
+  {% else %}
+  <p>There are no forums in the database.</p>
+  {% endif %}
+{% endif %}
+</p>
+<p>
+<a href="{% url 'tagme:tagme_create' %}">Add an Forum</a> |
+{% if user.is_authenticated %}
+<a href="{% url 'logout' %}?next={% url 'tagme:all' %}">Logout</a>
+{% else %}
+<a href="{% url 'login' %}?next={% url 'tagme:all' %}">Login</a>
+{% endif %}
+</p>
+{% endblock %}
