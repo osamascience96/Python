@@ -27,5 +27,6 @@ If i make any changes in the model, that would surely reflect on to our database
  
 So in general, after making the changes in model, you make new migrations, that will be migrated by you to apply the changes to the database.
 
-   
- 
+**More on Migrations:**   
+> When we make migrations on any app, each migration we make is stored in the django_migrations table in the database to keep the record of each migration, we performed. Now, while performing the migrations, we first make new migrations and that is stored in the migrations folder(not yet applied in the database structure), so the first one is stored in **001_initial.py** and then what we do either add any attribute so it is stored based on the migrations indexing going on in the project, **n_[modelname]_[attributeadded].py**, here *n* is the number of migrations being added like 002, 003, 004 etc and the model name is always mentioned there and the the last one is the name of the new attribute being updated in the schema of the table in the database. So when we migrate, we apply th following changes, now during the procedure when the structure is getting changed, the schema of the table is updated based on the migrations stored in the migration table and then the migrations table to store the record of the migration performed on the table. And when we delete the table, we see the migration stored in the migration folder is like this one **n_delete_[modelname].py**. Even this migration is also stored in the table. So weather if we delete the delete migration and then apply the migrations, the django is going to look in the models and based on it, it is going be recovered again and you cannot get rid of this delete migration, until you come up with a new migration for the table.
+
