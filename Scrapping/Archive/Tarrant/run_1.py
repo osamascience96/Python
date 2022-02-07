@@ -34,25 +34,29 @@ def initChromeDriver():
     return driver
 
 def get_pagination(pagination, url):
-    pagination = [i.text.replace("\t", '').replace("\n", '') for i in pagination]
-    pagination = [i for i in pagination if i!='']
-    pagination_list = []
-    if len(pagination)>2:
-        pagination = pagination[:-3]
-        for page in range(int(pagination[-1])):
-            pagination_list.append(url+f"?pg={page+1}")
-    return pagination_list
+    if pagination is not None:
+        pagination = [i.text.replace("\t", '').replace("\n", '') for i in pagination]
+        pagination = [i for i in pagination if i!='']
+        pagination_list = []
+        if len(pagination)>2:
+            pagination = pagination[:-3]
+            for page in range(int(pagination[-1])):
+                pagination_list.append(url+f"?pg={page+1}")
+        return pagination_list
+    else:
+        return []
 
 def get_table(soup):
-    soup = soup.find("table")
-    rows = soup.find_all("tr", class_="view_more_summary")
     table = []
-    for row in rows:
-        temp_row = []
-        for col in row:
-            temp_row.append(col.text.replace("\t", '').replace("\n", ""))
-        temp_row = [i for i in temp_row if i!='']
-        table.append(temp_row)
+    soup = soup.find("table")
+    if soup is not None:
+        rows = soup.find_all("tr", class_="view_more_summary")
+        for row in rows:
+            temp_row = []
+            for col in row:
+                temp_row.append(col.text.replace("\t", '').replace("\n", ""))
+            temp_row = [i for i in temp_row if i!='']
+            table.append(temp_row)
     return pd.DataFrame(table, columns=["Account", "Property Address", "Property City", "Primary Owner Name", "Market Value"])
 
 def fake_input(driver):
@@ -88,7 +92,7 @@ if __name__=='__main__':
     out_creds = ServiceAccountCredentials.from_json_keyfile_name('output.json', scope)
     output_client = gspread.authorize(out_creds)
     #Clear Output spreadsheet
-    out_sheet = output_client.open('Street Output')
+    out_sheet = output_client.open('Street Outputs')
     out_sheets_list = out_sheet.worksheets()
     out_sheets_list.reverse()
     for o_sheet in out_sheets_list[:-1]:
@@ -99,6 +103,8 @@ if __name__=='__main__':
     records_data = sheet_instance.get_all_records()
     records_df = pd.DataFrame.from_dict(records_data)
     input_streets = records_df["Streets"].tolist()
+
+    input_streets = set(input_streets)
     
     driver = initChromeDriver()
     driver.implicitly_wait(10)

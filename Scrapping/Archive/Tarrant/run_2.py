@@ -165,7 +165,7 @@ if __name__=='__main__':
         try :out_sheet.del_worksheet(o_sheet)
         except: pass
     # Open input spreadsheet and get all the input streets
-    sheet = client.open('Street Output')
+    sheet = client.open('Street Outputs')
     all_input_sheets = sheet.worksheets()
 
     for input_sheet in all_input_sheets[1:]:

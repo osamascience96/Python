@@ -64,7 +64,7 @@ if __name__=='__main__':
     out_creds = ServiceAccountCredentials.from_json_keyfile_name('out_credential.json', scope)
     out_client = gspread.authorize(out_creds)
     #Clear Output spreadsheet
-    out_sheet = out_client.open('output')
+    out_sheet = out_client.open('Output')
     out_sheets_list = out_sheet.worksheets()
     out_sheets_list.reverse()
     for o_sheet in out_sheets_list[:-1]:
@@ -109,11 +109,15 @@ if __name__=='__main__':
         if pegmentations!=[]:
             for pegemnt in pegmentations:
                 xpath = f'/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/div[3]/div/form/div/a[{pegemnt}]'
-                driver.find_element(By.XPATH, xpath).click()
-                table = BeautifulSoup(driver.page_source, 'lxml')
-                df = pd.read_html(str(table.find("table", class_= 'tablesorter')))[0]
-                data_list.append(df)
-                time.sleep(2)
+                try:
+                    driver.find_element(By.XPATH, xpath).click()
+                    table = BeautifulSoup(driver.page_source, 'lxml')
+                    df = pd.read_html(str(table.find("table", class_= 'tablesorter')))[0]
+                    data_list.append(df)
+                    time.sleep(2)
+                except:
+                    print("No Element Exists to click like: ")
+                    print(xpath) 
         else:
             table = BeautifulSoup(driver.page_source, 'lxml')
             try:

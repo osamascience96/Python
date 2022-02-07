@@ -85,6 +85,11 @@ if __name__=="__main__":
     sheet = streets_client.open('Streets')
     sheet_instance = sheet.get_worksheet(0)
     records_data = sheet_instance.get_all_records()
+
+    if len(records_data) <= 0:
+        print("No data in the input file")
+        exit()
+
     records_df = pd.DataFrame.from_dict(records_data)
     input_streets = records_df["Streets"].tolist()
     
