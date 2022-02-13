@@ -108,7 +108,6 @@ def bypass_audio(account):
         return driver
 
 def do_scraping(driver):
-    print("============== Tarrant Second Instance is Started ===============")
     driver.find_element(By.XPATH,
                     "/html/body/table[1]/tbody/tr[2]/td/div/table[3]/tbody/tr[2]/td[1]/a").click()
     owner = driver.find_element(By.XPATH, 
@@ -131,6 +130,7 @@ def do_scraping(driver):
         new_data.append(owner_details)
 
 def run(input_sheet, final_client):
+    print("============== Tarrant Second Instance is Started ===============")
     input_data = input_sheet.get_all_records()
     input_df = pd.DataFrame.from_dict(input_data)
     account_list = input_df["Account"].tolist()
@@ -151,7 +151,7 @@ def run(input_sheet, final_client):
     addresses = [i[1] for i in new_data]
     cities = [i[2] for i in new_data]
     total_amount = [i[3] for i in new_data]
-    
+
     input_df["Owner"] = owners
     input_df["Address"] = addresses
     input_df["City"] = cities
@@ -161,62 +161,4 @@ def run(input_sheet, final_client):
     work_sheet_instance = final_client.worksheet("Tarrant") # get that newly created sheet
     set_with_dataframe(work_sheet_instance, input_df) # Set collected data to sheet
 
-    print("============== Tarrant Second Instance is Finished ===============")     
-
-if __name__=='__main__':
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-
-    # Get input file
-    creds = ServiceAccountCredentials.from_json_keyfile_name('output.json', scope)
-    client = gspread.authorize(creds)
-    # Get output File
-    out_creds = ServiceAccountCredentials.from_json_keyfile_name('final.json', scope)
-    out_client = gspread.authorize(out_creds)
-    #Clear Output spreadsheet
-    out_sheet = out_client.open('Final Output')
-    out_sheets_list = out_sheet.worksheets()
-    out_sheets_list.reverse()
-    for o_sheet in out_sheets_list[:-1]:
-        try :out_sheet.del_worksheet(o_sheet)
-        except: pass
-    # Open input spreadsheet and get all the input streets
-    sheet = client.open('Street Outputs')
-    all_input_sheets = sheet.worksheets()
-
-    run(all_input_sheets[1], out_client)
-    exit()
-
-    for input_sheet in all_input_sheets[1:]:
-        street = input_sheet.title
-        input_data = input_sheet.get_all_records()
-        input_df = pd.DataFrame.from_dict(input_data)
-        account_list = input_df["Account"].tolist()
-        new_data = []
-        for account in account_list: 
-            time.sleep(190)
-            temp_driver = bypass_rechaptcha(account=account)
-            if temp_driver:
-                driver = temp_driver
-                if driver.current_url!="https://taxonline.tarrantcounty.com/taxweb/accountsearch.asp?linklocation=Iwantto&linkname=Property%20Account":
-                    new_data.append(do_scraping(driver=driver))
-                else:
-                    new_data.append(["", "", "", ""])
-            else:
-                new_data.append(["", "", "", ""])
-            
-        owners = [i[0] for i in new_data]
-        addresses = [i[1] for i in new_data]
-        cities = [i[2] for i in new_data]
-        total_amount = [i[3] for i in new_data]
-        
-        input_df["Owner"] = owners
-        input_df["Address"] = addresses
-        input_df["City"] = cities
-        input_df["Total"] = total_amount
-        
-        out_sheet.add_worksheet(rows=input_df.shape[0], cols=input_df.shape[1], title=street)  # Creat a new sheet
-        work_sheet_instance = out_sheet.worksheet(street) # get that newly created sheet
-        set_with_dataframe(work_sheet_instance, input_df) # Set collected data to sheet
-            
-    print("============== Program is Finished ===============")     
-    exit()         
+    print("============== Tarrant Second Instance is Finished ===============")

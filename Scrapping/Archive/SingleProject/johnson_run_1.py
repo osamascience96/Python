@@ -49,15 +49,11 @@ def run(input_sheet, output):
     driver.implicitly_wait(10)
     driver.refresh()
     
-    count = 0
     for street in input_sheet:
-        if count == 15:
-            break
         print(f"Scrapping {street} ......")
         driver.get(f"https://www.johnsoncountytaxoffice.org/Search/Results?Query.SearchField=5&Query.SearchText={street}&Query.SearchAction=&Query.PropertyType=&Query.PayStatus=Both")
         time.sleep(2)
         do_scraping(driver=driver)
-        count+=1
 
     final_dataframe = pd.DataFrame(final_data, columns=["Account", "Name", "Amount"])
     output.add_worksheet(rows=final_dataframe.shape[0], cols=final_dataframe.shape[1], title="Johnson")  # Creat a new sheet

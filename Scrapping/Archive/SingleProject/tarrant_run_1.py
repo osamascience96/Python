@@ -63,7 +63,6 @@ def run(input_streets, output):
     driver.refresh()
     fake_input(driver)
     
-    
     for street in input_streets:
         print(f"Scrapping {street} ..... ")
         driver.get("https://www.tad.org/property-search/")
@@ -91,7 +90,6 @@ def run(input_streets, output):
                 get_table(soup=soup)
         else:
             get_table(soup=soup)
-        
     driver.close() # Close the driver
 
     # final_dataframe = pd.concat(all_tables)
