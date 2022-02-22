@@ -21,22 +21,55 @@ def AskMessage():
     return "Press 1 to continue or 0 to exit this Procedure => ";
 
 
+# Get New Created Sheet
+def GetNewCreatedSheet(client, index):
+    sheet = client.open("Street Output")
+    list_of_sheets = sheet.worksheets()
+    return list_of_sheets[index]
+
 # Script Exists function
-def ScriptExists(script_list, name):
+def ScriptExists(script_client, type, name):
+    
+    script = None
+    if type is 'Output':
+        script = script_client.open("Street Output");
+    else:
+        script = script_client.open("Final Output");
+    
+    script_list = script.worksheets();
+
     sriptList = script_list[:-1];
     for index in range(len(sriptList)):
         if sriptList[index] == name:
-            return index
+            return true
     
-    return 0
+    return false
 
 # Get Free Index Function
-def GetFreeIndex(script_list):
+def GetFreeIndex(script_client, type):
+
+    script = None
+    if type is 'Output':
+        script = script_client.open("Street Output");
+    else:
+        script = script_client.open("Final Output");
+    
+    script_list = script.worksheets();
+
     sriptList = script_list[:-1];
     return (len(sriptList) - 1) + 1 if len(sriptList) > 0 else 0;
 
 # Remove the script function
-def RemoveScript(script_list, name):
+def RemoveScript(script_client, type, name):
+
+    script = None
+    if type is 'Output':
+        script = script_client.open("Street Output");
+    else:
+        script = script_client.open("Final Output");
+    
+    script_list = script.worksheets();
+
     sriptList = script_list[:-1];
     for script in sriptList:
         if script == name:

@@ -1,14 +1,10 @@
-from time import time
+from time import sleep
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
-from helper import GetFreeIndex, ScriptExists, RemoveScript, lineSeperator, ClearScreen, AskMessage
+from sqlalchemy import false, true
+from helper import GetFreeIndex, ScriptExists, RemoveScript, GetNewCreatedSheet, lineSeperator, ClearScreen, AskMessage
 import tarrant_run_1, tarrant_run_2, dallas_scraping, ellis_run, denton_run_1, denton_run_2, johnson_run_1, johnson_run_2
-
-def GetNewCreatedSheet(client, index):
-    sheet = client.open("Street Output")
-    list_of_sheets = sheet.worksheets()
-    return list_of_sheets[index]
 
 if __name__=='__main__':
     print("Run Scrapping Program?")
@@ -74,8 +70,8 @@ if __name__=='__main__':
                     out_sheet.del_worksheet(o_sheet)
                 print(lineSeperator())
                 print("Cleared the Output File")
-                time(2)
-                option = None
+                sleep(2)
+                break;
             else:
                 ClearScreen()
                 break;
@@ -103,8 +99,8 @@ if __name__=='__main__':
                 
                 print(lineSeperator())
                 print("Cleared the Final File")
-                time(2)
-                option = None
+                sleep(2)
+                break;
             else:
                 ClearScreen()
                 break
@@ -122,11 +118,27 @@ if __name__=='__main__':
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                tarrant_run_1.run(input_streets=input_streets, output=out_sheet)
+                script_exists = ScriptExists(output_client, "Output", "Tarrant");
+                if script_exists is false:
+                    ClearScreen()
+                    tarrant_run_1.run(input_streets=input_streets, output=out_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(output_client, "Output", "Tarrant")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        tarrant_run_1.run(input_streets=input_streets, output=out_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the Tarrant File")
-                time(2)
-                option = None
+                sleep(2)
+                break
             else:
                 ClearScreen()
                 break
@@ -137,18 +149,36 @@ if __name__=='__main__':
 
     option = None
 
-    # Run tarrant second instance (Note: Use worksheet output 1)
+    # Run tarrant second instance
     while option is None:
         try:
             print("Do you want to Execute the Tarrant Script 2?")
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                tarrant_run_2.run(GetNewCreatedSheet(output_client, 1), final_client=final_sheet)
+                script_exists = ScriptExists(final_client, "Final", "Tarrant")
+                if script_exists is false:
+                    ClearScreen()
+                    index = GetFreeIndex(final_client, "Final")
+                    tarrant_run_2.run(GetNewCreatedSheet(output_client, index), final_client=final_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(final_client, "Final", "Tarrant")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        index = GetFreeIndex(final_client, "Final")
+                        tarrant_run_2.run(GetNewCreatedSheet(output_client, index), final_client=final_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the Tarrant File")
-                time(2)
-                option = None
+                sleep(2)
+                break;
             else:
                 ClearScreen()
                 break
@@ -158,7 +188,6 @@ if __name__=='__main__':
     ClearScreen()
 
     option = None
-
     # Run dallas scrappping instance 
     while option is None:
         try:
@@ -166,11 +195,27 @@ if __name__=='__main__':
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                dallas_scraping.run(input_streets, out_sheet)
+                script_exists = ScriptExists(output_client, "Output", "Dallas Scrapping");
+                if script_exists is false:
+                    ClearScreen()
+                    dallas_scraping.run(input_streets, out_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(output_client, "Output", "Dallas Scrapping")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        dallas_scraping.run(input_streets, out_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the dallas File")
-                time(2)
-                option = None
+                sleep(2)
+                break
             else:
                 ClearScreen()
                 break
@@ -188,11 +233,27 @@ if __name__=='__main__':
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                ellis_run.run(input_streets, out_sheet)
+                script_exists = ScriptExists(output_client, "Output", "Ellis Scrapping");
+                if script_exists is false:
+                    ClearScreen()
+                    ellis_run.run(input_streets, out_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(output_client, "Output", "Ellis Scrapping")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        ellis_run.run(input_streets, out_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the Ellis File")
-                time(2)
-                option = None
+                sleep(2)
+                break
             else:
                 ClearScreen()
                 break
@@ -210,11 +271,27 @@ if __name__=='__main__':
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                denton_run_1.run(input_streets, out_sheet)
+                script_exists = ScriptExists(output_client, "Output", "Denton");
+                if script_exists is false:
+                    ClearScreen()
+                    denton_run_1.run(input_streets, out_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(output_client, "Output", "Denton")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        denton_run_1.run(input_streets, out_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the Denton File")
-                time(2)
-                option = None
+                sleep(2)
+                break
             else:
                 ClearScreen()
                 break
@@ -224,19 +301,36 @@ if __name__=='__main__':
     ClearScreen()
 
     option = None
-    
-    # Run Denton instance 2 (Note: Use worksheet output 4)
+    # Run Denton instance 2
     while option is None:
         try:
             print("Do you want to Execute the Denton Script 2?")
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                denton_run_2.run(GetNewCreatedSheet(output_client, 4), final_sheet)
+                script_exists = ScriptExists(final_client, "Final", "Denton")
+                if script_exists is false:
+                    ClearScreen()
+                    index = GetFreeIndex(final_client, "Final")
+                    denton_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(final_client, "Final", "Denton")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        index = GetFreeIndex(final_client, "Final")
+                        denton_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the Denton File")
-                time(2)
-                option = None
+                sleep(2)
+                break
             else:
                 ClearScreen()
                 break
@@ -246,7 +340,6 @@ if __name__=='__main__':
     ClearScreen()
 
     option = None
-
     # Run Johnson instance 1 
     while option is None:
         try:
@@ -254,11 +347,27 @@ if __name__=='__main__':
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                johnson_run_1.run(input_streets, out_sheet)
+                script_exists = ScriptExists(output_client, "Output", "Johnson");
+                if script_exists is false:
+                    ClearScreen()
+                    johnson_run_1.run(input_streets, out_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(output_client, "Output", "Johnson")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        johnson_run_1.run(input_streets, out_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the Johnson File")
-                time(2)
-                option = None
+                sleep(2)
+                break
             else:
                 ClearScreen()
                 break
@@ -268,19 +377,36 @@ if __name__=='__main__':
     ClearScreen()
 
     option = None
-
-    # Run Johnson instance 2 (Note: Use workshet Output 5)
+    # Run Johnson instance 2
     while option is None:
         try:
             print("Do you want to Execute the Johnson Script 2?")
             print(lineSeperator())
             option = int(input(AskMessage()))
             if option == 1:
-                johnson_run_2.run(GetNewCreatedSheet(output_client, 5), final_sheet)
+                script_exists = ScriptExists(final_client, "Final", "Johnson")
+                if script_exists is false:
+                    ClearScreen()
+                    index = GetFreeIndex(final_client, "Final")
+                    johnson_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                else:
+                    print(lineSeperator())
+                    print("It looks like the Script already Exists in the File")
+                    print(lineSeperator())
+                    print("Clearing the Old Script Data for you")
+                    print(lineSeperator())
+                    is_removed = RemoveScript(final_client, "Final", "Johnson")
+                    if is_removed is true:
+                        print("The Script is removed for you, it'll start running shortly")
+                        ClearScreen()
+                        index = GetFreeIndex(final_client, "Final")
+                        johnson_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                    else:
+                        print("The Script cannot be removed and the script cannot run at this point")
+                        break
                 print(lineSeperator())
-                print("Cleared the Johnson File")
-                time(2)
-                option = None
+                sleep(2)
+                break
             else:
                 ClearScreen()
                 break
