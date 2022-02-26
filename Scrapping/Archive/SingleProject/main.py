@@ -2,7 +2,6 @@ from time import sleep
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
-from sqlalchemy import false, true
 from helper import GetFreeIndex, ScriptExists, RemoveScript, GetNewCreatedSheet, lineSeperator, ClearScreen, AskMessage
 import tarrant_run_1, tarrant_run_2, dallas_scraping, ellis_run, denton_run_1, denton_run_2, johnson_run_1, johnson_run_2
 
@@ -119,7 +118,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(output_client, "Output", "Tarrant");
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     tarrant_run_1.run(input_streets=input_streets, output=out_sheet)
                 else:
@@ -129,7 +128,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(output_client, "Output", "Tarrant")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         tarrant_run_1.run(input_streets=input_streets, output=out_sheet)
@@ -157,7 +156,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(final_client, "Final", "Tarrant")
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     index = GetFreeIndex(final_client, "Final")
                     tarrant_run_2.run(GetNewCreatedSheet(output_client, index), final_client=final_sheet)
@@ -168,7 +167,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(final_client, "Final", "Tarrant")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         index = GetFreeIndex(final_client, "Final")
@@ -196,7 +195,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(output_client, "Output", "Dallas Scrapping");
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     dallas_scraping.run(input_streets, out_sheet)
                 else:
@@ -206,7 +205,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(output_client, "Output", "Dallas Scrapping")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         dallas_scraping.run(input_streets, out_sheet)
@@ -234,7 +233,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(output_client, "Output", "Ellis Scrapping");
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     ellis_run.run(input_streets, out_sheet)
                 else:
@@ -244,7 +243,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(output_client, "Output", "Ellis Scrapping")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         ellis_run.run(input_streets, out_sheet)
@@ -272,7 +271,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(output_client, "Output", "Denton");
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     denton_run_1.run(input_streets, out_sheet)
                 else:
@@ -282,7 +281,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(output_client, "Output", "Denton")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         denton_run_1.run(input_streets, out_sheet)
@@ -309,7 +308,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(final_client, "Final", "Denton")
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     index = GetFreeIndex(final_client, "Final")
                     denton_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
@@ -320,7 +319,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(final_client, "Final", "Denton")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         index = GetFreeIndex(final_client, "Final")
@@ -348,7 +347,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(output_client, "Output", "Johnson");
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     johnson_run_1.run(input_streets, out_sheet)
                 else:
@@ -358,7 +357,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(output_client, "Output", "Johnson")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         johnson_run_1.run(input_streets, out_sheet)
@@ -385,7 +384,7 @@ if __name__=='__main__':
             option = int(input(AskMessage()))
             if option == 1:
                 script_exists = ScriptExists(final_client, "Final", "Johnson")
-                if script_exists is false:
+                if script_exists is False:
                     ClearScreen()
                     index = GetFreeIndex(final_client, "Final")
                     johnson_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
@@ -396,7 +395,7 @@ if __name__=='__main__':
                     print("Clearing the Old Script Data for you")
                     print(lineSeperator())
                     is_removed = RemoveScript(final_client, "Final", "Johnson")
-                    if is_removed is true:
+                    if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         index = GetFreeIndex(final_client, "Final")

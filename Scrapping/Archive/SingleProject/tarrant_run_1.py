@@ -1,7 +1,5 @@
-import gspread
 import pandas as pd
 from loader import initChromeDriver
-from oauth2client.service_account import ServiceAccountCredentials
 from gspread_dataframe import set_with_dataframe
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup

@@ -1,7 +1,5 @@
-from itertools import count
 from os import system, name
 
-from sqlalchemy import false, true
 # Adds the line seperator to the menu
 def lineSeperator():
     return "==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+";
@@ -41,9 +39,9 @@ def ScriptExists(script_client, type, name):
     sriptList = script_list[:-1];
     for index in range(len(sriptList)):
         if sriptList[index] == name:
-            return true
+            return True
     
-    return false
+    return False
 
 # Get Free Index Function
 def GetFreeIndex(script_client, type):
@@ -74,7 +72,7 @@ def RemoveScript(script_client, type, name):
     for script in sriptList:
         if script == name:
             sriptList.del_worksheet(script)
-            return true
+            return True
     
-    return false
+    return False
 
