@@ -1,4 +1,0 @@
-
-# This has been moved to 
-
-scripts/gview_load.py

@@ -1,2 +1,0 @@
-famous_people_quotes = ["If Opportunity doesn't knock, build a door", "Life is beautiful", "Be not afraid of growing slowly, be afraid of standing still"]
-famous_songs_lines = ["Assan taay jaana billo daay kaar", "Another day has gone, i am still all alone", "Aaja ni bayja cycle taay", "Oo GT-Road taay breakan lagiyan ni billo teri taur vekh kaay", "Bheega Bheega sa yeh december haay"]
