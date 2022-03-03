@@ -311,7 +311,7 @@ if __name__=='__main__':
                 if script_exists is False:
                     ClearScreen()
                     index = GetFreeIndex(final_client, "Final")
-                    denton_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                    denton_run_2.run(GetNewCreatedSheet(output_client, index + 1), final_sheet)
                 else:
                     print(lineSeperator())
                     print("It looks like the Script already Exists in the File")
