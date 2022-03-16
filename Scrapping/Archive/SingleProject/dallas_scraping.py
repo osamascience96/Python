@@ -1,8 +1,11 @@
+from itertools import count
+from numpy import amin
 import pandas as pd
 from gspread_dataframe import set_with_dataframe
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 import time
 
@@ -12,123 +15,145 @@ from loader import initChromeDriver
 final_data = []
 
 def separate_name(sample:list):
-    sample = [i for i in sample if (i!='' and i!=" ")]
-    sample = sample[2:]
-    if sample[0][-1]=="&" and sample[1][-1]!="&":
-        name = " ".join(sample[:2])
-        address = sample[2]
-        #city = " ".join([i for i in sample[3].split(" ") if any(map(str.isdigit, i))==False])
-        city = sample[3].split("  ")[0]
-    elif sample[1][-1]=="&" and sample[2][-1]!="&":
-        name = " ".join(sample[:3])
-        address = sample[3]
-        city = sample[4].split("  ")[0]
-    elif sample[2][-1]=="&":
-        name = " ".join(sample[:4])
-        address = sample[4]
-        city = sample[5].split("  ")[0]
-    else:
-        name = sample[0]
-        address = sample[1]
-        city = sample[2].split("  ")[0]
-    return [name, address, city]
+    keys_array = ['Address:', 'Property Site Address:', 'Current Tax Levy: \xa0 ', 
+        'Current Amount Due: \xa0 ', 'Market Value:', 'Legal Description:', 'Prior Year Amount Due: \xa0 ',
+        'Total Amount Due: \xa0 ', 'Land Value:', 'Improvement Value:', 'Capped Value:', 'Agricultural Value:', 'Exemptions:',
+        'Current Tax Statement', 'Summary Tax Statement', 'Taxes Due Detail by Year and Jurisdiction', 'Payment Information',
+        'Composite Receipt', '(pending payments are not included) ', 'Request an Address Correction']
+    data = [i for i in sample if (i!='' and i!=" ")]
+    
+    name = ""
+    address = ""
+    PropertySiteAddress = ""
+    TaxLevy = ""
+    AmountDue = ""
+    MarketVal = ""
 
-def run(input_streets, output):
+    for value in data:
+        if(value in keys_array):
+            index = data.index(value) + 1
+            if(index < len(data)):
+                while(data[index] not in keys_array):
+                    if value == keys_array[0]:
+                        address += (data[index] + " ")
+                    elif value == keys_array[1]:
+                        name += (data[index] + " ")
+                        PropertySiteAddress += (data[index] + " ")
+                    elif value == keys_array[2]:
+                        TaxLevy += data[index]
+                    elif value == keys_array[7]:
+                        AmountDue += data[index]
+                    elif value == keys_array[4]:
+                        MarketVal += data[index]
+                    index +=1
+    
+    MarketVal = MarketVal.replace(' \xa0', '')
+
+    return [name.strip(), address.strip(), PropertySiteAddress.strip(), TaxLevy.strip(), AmountDue.strip(), MarketVal.strip()]
+
+def FinalWritingProcedure(driver, soup, street_name):
+    while True:
+        try:
+            WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, '/html/body/table/tbody/tr[2]/td/table/tbody/tr[2]/td/table[2]')))
+            break
+        except: 
+            driver.refresh()
+    
+    table = driver.find_element(By.XPATH, '/html/body/table/tbody/tr[2]/td/table/tbody/tr[2]/td/table[2]').get_property("innerHTML")
+    soup = BeautifulSoup(table, 'lxml')
+    soup = soup.find_all('h3')
+    
+    storage = []
+    storage2 = []
+    for values in soup:
+        if values.find('b'):
+            if values.text.replace('\t', '').replace('\n', ''): 
+                storage.append(values.text.replace('\t', '').replace('\n', ''))
+            
+            for value in values:
+                temp = value.text.replace('\t', '').replace('\n', '')
+                storage2.append(temp)
+    
+    seperated_value = separate_name(storage2)
+
+    address_owner = seperated_value[0]
+    address = seperated_value[1]
+    PropertySiteAddress = seperated_value[2]
+    TaxLevy = seperated_value[3]
+    AmountDue = seperated_value[4]
+    MarketVal = seperated_value[5]
+
+
+    final_data.append([address_owner, address, PropertySiteAddress, TaxLevy, AmountDue, MarketVal])
+    print(f"|| {address_owner} || Scrapped from {street_name}")
+        
+
+def ContinueWriteProcedure(driver, street_name):
+
+    HypToClick = '/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/div[3]/table/tbody/tr/td[1]/a'
+    
+    while True:
+        try:
+            WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, HypToClick)))
+            break
+        except: 
+            driver.refresh()
+    
+    driver.find_element(By.XPATH, HypToClick).click()
+    time.sleep(1)
+
+    # Get the searched Results
+    soup = BeautifulSoup(driver.page_source, 'lxml')
+    if(soup is not None):
+        FinalWritingProcedure(driver, soup, street_name)
+
+def run(list_df, output):
     print("=============Dallas Scrapping Started=============")
-    for street in input_streets:
-        driver = initChromeDriver()
-        # Click and apply input streets
-        while True:
-            driver.get('https://www.dallasact.com/act_webdev/dallas/searchbyproperty.jsp')
-            try:
-                WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, '/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/div[1]/a[2]')))
-                break
-            except: 
-                driver.refresh()
-        driver.find_element(By.XPATH, 
-                            '/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/div[1]/a[2]').click()
-        time.sleep(0.5)
-        driver.find_element(By.XPATH, 
-                            '/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/table/tbody/tr/td/center/form/table/tbody/tr[3]/td[2]/h3/input').send_keys(street)
-        time.sleep(0.5)
-        driver.find_element(By.XPATH, 
-                            '/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/table/tbody/tr/td/center/form/table/tbody/tr[5]/td/center/input').click()
-        time.sleep(0.5)
-        # Get the pegmentations
-        soup = BeautifulSoup(driver.page_source, 'lxml')
-        soup = soup.find('div', class_ = 'pagination')
-        data_list = []
-        pegmentations = []
-        if soup:
-            for pegment in soup:
-                try: pegmentations.append(int(pegment.text))
-                except: pass
-        # Parse the table accross each pengemtation
-        if pegmentations!=[]:
-            for pegemnt in pegmentations:
-                xpath = f'/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/div[3]/div/form/div/a[{pegemnt}]'
-                try:
-                    driver.find_element(By.XPATH, xpath).click()
-                    table = BeautifulSoup(driver.page_source, 'lxml')
-                    df = pd.read_html(str(table.find("table", class_= 'tablesorter')))[0]
-                    data_list.append(df)
-                    time.sleep(2)
-                except:
-                    print("No Element Exists to click like: ")
-                    print(xpath) 
-        else:
-            table = BeautifulSoup(driver.page_source, 'lxml')
-            try:
-                df = pd.read_html(str(table.find("table", class_= 'tablesorter')))[0]
-                data_list.append(df)
-                time.sleep(2)
-            except:
-                df = pd.DataFrame()
-                data_list.append(df)
-                time.sleep(2)
-        
-        data_df = pd.concat(data_list) # merge all the data
-        data = data_df.values.tolist()
-        for addresses in data:
-            time.sleep(1)
-            try:
-                account = addresses[0]
-                new_link = f"https://www.dallasact.com/act_webdev/dallas/showdetail2.jsp?can={account}&ownerno=0"
-                driver.get(new_link)
-                while True:
-                    try:
-                        WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, '/html/body/table/tbody/tr[2]/td/table/tbody/tr[2]/td/table[2]')))
-                        break
-                    except: 
-                        driver.refresh()
-                
-                table = driver.find_element(By.XPATH, '/html/body/table/tbody/tr[2]/td/table/tbody/tr[2]/td/table[2]').get_property("innerHTML")
-                soup = BeautifulSoup(table, 'lxml')
-                soup = soup.find_all('h3')
-                storage = []
-                storage2 = []
-                for values in soup:
-                    if values.find('b'):
-                        if values.text.replace('\t', '').replace('\n', ''): storage.append(values.text.replace('\t', '').replace('\n', ''))
-                        for value in values:
-                            temp = value.text.replace('\t', '').replace('\n', '')
-                            storage2.append(temp)
-                if "Total Amount Due: \xa0     $0.00" in storage[0]: continue
-                else:
-                    person_name = separate_name(storage2)[0]
-                    final_data.append(separate_name(storage2) +
-                                      [addresses[2]] + 
-                                      [storage[0].split("\xa0")[-1].replace(" ", ''), storage[1].split("\xa0")[1].split(" ")[0]])
-                    print(f"|| {person_name} || Scrapped from {street}")
-            except: 
-                pass
+    df = list_df
+    driver = initChromeDriver()
 
-    final_dataframe = pd.DataFrame(final_data, columns=["Name", "Address", "City", "Property Site Address","Total Amount due", "Market Value"])
+    # minimum search results
+    minimumSearchCount = 0
+    minimumSearch = input("Enter Minimum Search Results in Number: ")
+    if minimumSearch is not None:
+        minimumSearch = int(minimumSearch)
+
+    for street_obj in df.values:
+        if(minimumSearchCount > minimumSearch):
+            break
+        while True:
+            driver.set_page_load_timeout(10)
+            try:
+                driver.get('https://www.dallasact.com/act_webdev/dallas/searchbyproperty.jsp')            
+                street_num = int(street_obj[0])
+                street_name = street_obj[1]
+
+                driver.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/table/tbody/tr/td/center/form/table/tbody/tr[2]/td[2]/h3/input').send_keys(street_num)
+                driver.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/table/tbody/tr/td/center/form/table/tbody/tr[3]/td[2]/h3/input').send_keys(street_name)
+                time.sleep(0.5)
+                driver.find_element(By.XPATH, '/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/table/tbody/tr/td/center/form/table/tbody/tr[5]/td/center/input').click()
+                time.sleep(0.5)
+
+                # Get the searched Results
+                soup = BeautifulSoup(driver.page_source, 'lxml')
+                # Get the size of the data received
+                size = soup.find('span', id="mySize")
+                if(size is not None):
+                    size = int(size.get_text())
+                    if(size > 0):
+                        ContinueWriteProcedure(driver, street_name)
+                        break
+            except TimeoutException:
+                driver.execute_script("window.stop();")
         
-    output.add_worksheet(rows=final_dataframe.shape[0], cols=final_dataframe.shape[1], title="Dallas Scrapping")  # Creat a new sheet
-    work_sheet_instance = output.worksheet("Dallas Scrapping") # get that newly created sheet
-    
+        minimumSearchCount +=1
+
+    fileName = f"Dallas Scrapping {str(minimumSearch)} Searches";
+
+    final_dataframe = pd.DataFrame(final_data, columns=["Owner", "Address", "Property Site Address", "Current Tax Levy", "Total Amount due", "Market Value"])
+    output.add_worksheet(rows=final_dataframe.shape[0], cols=final_dataframe.shape[1], title=fileName)  # Creat a new sheet
+    work_sheet_instance = output.worksheet(fileName) # get that newly created sheet
     set_with_dataframe(work_sheet_instance, final_dataframe) # Set collected data to sheet
-    
     driver.close() # Close the driver
+
     print("=============Dallas Scrapping finished=============")

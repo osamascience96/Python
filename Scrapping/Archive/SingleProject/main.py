@@ -2,7 +2,7 @@ from time import sleep
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
-from helper import GetFreeIndex, ScriptExists, RemoveScript, GetNewCreatedSheet, lineSeperator, ClearScreen, AskMessage
+from helper import GetDallasMasterColumnsDict, GetFreeIndex, ScriptExists, RemoveScript, GetNewCreatedSheet, lineSeperator, ClearScreen, AskMessage
 import tarrant_run_1, tarrant_run_2, dallas_scraping, ellis_run, denton_run_1, denton_run_2, johnson_run_1, johnson_run_2
 
 if __name__=='__main__':
@@ -197,7 +197,7 @@ if __name__=='__main__':
                 script_exists = ScriptExists(output_client, "Output", "Dallas Scrapping");
                 if script_exists is False:
                     ClearScreen()
-                    dallas_scraping.run(input_streets, out_sheet)
+                    dallas_scraping.run(GetDallasMasterColumnsDict(), out_sheet)
                 else:
                     print(lineSeperator())
                     print("It looks like the Script already Exists in the File")
@@ -208,7 +208,7 @@ if __name__=='__main__':
                     if is_removed is True:
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
-                        dallas_scraping.run(input_streets, out_sheet)
+                        dallas_scraping.run(GetDallasMasterColumnsDict(), out_sheet)
                     else:
                         print("The Script cannot be removed and the script cannot run at this point")
                         break

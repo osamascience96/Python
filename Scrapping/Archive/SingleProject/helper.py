@@ -1,4 +1,5 @@
 from os import system, name
+from pandas import read_csv
 
 # Adds the line seperator to the menu
 def lineSeperator():
@@ -76,3 +77,7 @@ def RemoveScript(script_client, type, name):
     
     return False
 
+def GetDallasMasterColumnsDict():
+    col_list = ["STREET_NUM", "FULL_STREET_NAME"];
+    df = read_csv("DallasMaster.csv", usecols=col_list)
+    return df
