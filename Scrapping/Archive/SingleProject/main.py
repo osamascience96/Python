@@ -159,7 +159,11 @@ if __name__=='__main__':
                 if script_exists is False:
                     ClearScreen()
                     index = GetFreeIndex(final_client, "Final")
-                    tarrant_run_2.run(GetNewCreatedSheet(output_client, index), final_client=final_sheet)
+                    Out_sheet = GetNewCreatedSheet(output_client, 'Tarrant')
+                    if Out_sheet is not None:
+                        tarrant_run_2.run(Out_sheet, final_client=final_sheet)
+                    else:
+                        print("The Output data of Tarrant 1 Script doesn't exists. Please Run Tarrant 1 in order to run Tarrant 2 Script")
                 else:
                     print(lineSeperator())
                     print("It looks like the Script already Exists in the File")
@@ -171,7 +175,11 @@ if __name__=='__main__':
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         index = GetFreeIndex(final_client, "Final")
-                        tarrant_run_2.run(GetNewCreatedSheet(output_client, index), final_client=final_sheet)
+                        Out_sheet = GetNewCreatedSheet(output_client, 'Tarrant')
+                        if Out_sheet is not None:
+                            tarrant_run_2.run(Out_sheet, final_client=final_sheet)
+                        else:
+                            print("The Output data of Tarrant 1 Script doesn't exists. Please Run Tarrant 1 in order to run Tarrant 2 Script")
                     else:
                         print("The Script cannot be removed and the script cannot run at this point")
                         break
@@ -311,7 +319,11 @@ if __name__=='__main__':
                 if script_exists is False:
                     ClearScreen()
                     index = GetFreeIndex(final_client, "Final")
-                    denton_run_2.run(GetNewCreatedSheet(output_client, index + 1), final_sheet)
+                    Output_Sheet = GetNewCreatedSheet(output_client, 'Denton')
+                    if Output_Sheet is not None:
+                        denton_run_2.run(Output_Sheet, final_sheet)
+                    else:
+                        print("The Output data of Denton 1 Script doesn't exists. Please Run Denton 1 in order to run Denton 2 Script")
                 else:
                     print(lineSeperator())
                     print("It looks like the Script already Exists in the File")
@@ -323,7 +335,11 @@ if __name__=='__main__':
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         index = GetFreeIndex(final_client, "Final")
-                        denton_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                        Output_Sheet = GetNewCreatedSheet(output_client, 'Denton')
+                        if Output_Sheet is not None:
+                            denton_run_2.run(Output_Sheet, final_sheet)
+                        else:
+                            print("The Output data of Denton 1 Script doesn't exists. Please Run Denton 1 in order to run Denton 2 Script")
                     else:
                         print("The Script cannot be removed and the script cannot run at this point")
                         break
@@ -387,7 +403,11 @@ if __name__=='__main__':
                 if script_exists is False:
                     ClearScreen()
                     index = GetFreeIndex(final_client, "Final")
-                    johnson_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                    Output_sheet = GetNewCreatedSheet(output_client, 'Johnson')
+                    if Output_sheet is not None:
+                        johnson_run_2.run(Output_sheet, final_sheet)
+                    else:
+                        print("The Output data of Johnson 1 Script doesn't exists. Please Run Johnson 1 in order to run Johnson 2 Script")
                 else:
                     print(lineSeperator())
                     print("It looks like the Script already Exists in the File")
@@ -399,7 +419,11 @@ if __name__=='__main__':
                         print("The Script is removed for you, it'll start running shortly")
                         ClearScreen()
                         index = GetFreeIndex(final_client, "Final")
-                        johnson_run_2.run(GetNewCreatedSheet(output_client, index), final_sheet)
+                        Output_sheet = GetNewCreatedSheet(output_client, 'Johnson')
+                        if Output_sheet is not None:
+                            johnson_run_2.run(Output_sheet, final_sheet)
+                        else:
+                            print("The Output data of Johnson 1 Script doesn't exists. Please Run Johnson 1 in order to run Johnson 2 Script")
                     else:
                         print("The Script cannot be removed and the script cannot run at this point")
                         break

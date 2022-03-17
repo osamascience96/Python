@@ -21,10 +21,18 @@ def AskMessage():
 
 
 # Get New Created Sheet
-def GetNewCreatedSheet(client, index):
+def GetNewCreatedSheet(client, script_name):
     sheet = client.open("Street Output")
     list_of_sheets = sheet.worksheets()
-    return list_of_sheets[index]
+    
+    ReturnedSheet = None
+
+    for sheet in list_of_sheets:
+        if (sheet.title == script_name):
+            ReturnedSheet = sheet
+            break
+
+    return ReturnedSheet
 
 # Script Exists function
 def ScriptExists(script_client, type, name):

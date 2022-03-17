@@ -134,7 +134,7 @@ def run(input_sheet, final_client):
     account_list = input_df["Account"].tolist()
     
     for account in account_list: 
-        time.sleep(190)
+        time.sleep(30)
         temp_driver = bypass_rechaptcha(account=account)
         if temp_driver:
             driver = temp_driver
