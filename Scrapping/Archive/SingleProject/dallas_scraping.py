@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 import time
+from helper import ReadDallasCount, WriteDallasCount
 
 from loader import initChromeDriver
 
@@ -112,6 +113,8 @@ def run(list_df, output):
     df = list_df
     driver = initChromeDriver()
 
+    continueCount = ReadDallasCount()
+
     # minimum search results
     minimumSearchCount = 0
     minimumSearch = input("Enter Minimum Search Results in Number: ")
@@ -119,7 +122,7 @@ def run(list_df, output):
         minimumSearch = int(minimumSearch)
 
     for street_obj in df.values:
-        if(minimumSearchCount > minimumSearch):
+        if(minimumSearchCount >= minimumSearch):
             break
         while True:
             driver.set_page_load_timeout(10)
@@ -147,6 +150,10 @@ def run(list_df, output):
                 driver.execute_script("window.stop();")
         
         minimumSearchCount +=1
+        continueCount +=1
+    
+    # Write last count 
+    WriteDallasCount(continueCount)
 
     fileName = f"Dallas Scrapping {str(minimumSearch)} Searches";
 

@@ -87,5 +87,26 @@ def RemoveScript(script_client, type, name):
 
 def GetDallasMasterColumnsDict():
     col_list = ["STREET_NUM", "FULL_STREET_NAME"];
-    df = read_csv("DallasMaster.csv", usecols=col_list)
+    
+    N = ReadDallasCount() + 1
+    
+    df = read_csv("DallasMaster.csv", usecols=col_list, skiprows=[i for i in range(1,N)])
     return df
+
+def WriteDallasCount(count):
+    file = open("dallas_script_record.txt", "w");
+    file.write(str(count))
+    file.close()
+
+def ReadDallasCount():
+    file = open("dallas_script_record.txt", "r+");
+    data = int(file.readline())
+    file.close()
+
+    return data
+
+
+# main
+if __name__ == "__main__":
+    print(ReadDallasCount())
+    WriteDallasCount(2)
