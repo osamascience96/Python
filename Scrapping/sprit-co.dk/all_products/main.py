@@ -1,3 +1,4 @@
+from time import sleep
 import requests
 from bs4 import BeautifulSoup
 from get_all_products import AllProducts
@@ -29,6 +30,8 @@ for category in all_categories:
     allprods.GetRemainingProducts()
 
     all_cat_products[title] = allprods.GetWebsiteProductsList()
+
+    sleep(3)
 
 
 for key in all_cat_products:
