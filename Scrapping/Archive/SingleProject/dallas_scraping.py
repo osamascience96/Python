@@ -137,15 +137,19 @@ def run(list_df, output):
                 driver.find_element(By.XPATH, '/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td/table/tbody/tr/td/center/form/table/tbody/tr[5]/td/center/input').click()
                 time.sleep(0.5)
 
-                # Get the searched Results
-                soup = BeautifulSoup(driver.page_source, 'lxml')
-                # Get the size of the data received
-                size = soup.find('span', id="mySize")
-                if(size is not None):
-                    size = int(size.get_text())
-                    if(size > 0):
-                        ContinueWriteProcedure(driver, street_name)
-                        break
+                try:
+                    # Get the searched Results
+                    soup = BeautifulSoup(driver.page_source, 'lxml')
+                    # Get the size of the data received
+                    size = soup.find('span', id="mySize")
+                    if(size is not None):
+                        size = int(size.get_text())
+                        if(size > 0):
+                            ContinueWriteProcedure(driver, street_name)
+                            break
+                except Exception as e:
+                    print(e)
+                    time.sleep(1)
             except TimeoutException:
                 driver.execute_script("window.stop();")
         
