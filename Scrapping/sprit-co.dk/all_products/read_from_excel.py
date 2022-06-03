@@ -5,7 +5,7 @@ import xlsxwriter
 class Excel:
 
     def __init__(self, loc):
-        data = pandas.read_excel(loc)
+        data = pandas.read_excel(f"all_products/{loc}")
         
         self.row = 1
 
